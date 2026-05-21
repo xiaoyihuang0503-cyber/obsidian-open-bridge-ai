@@ -1,7 +1,7 @@
 'use strict';
 
 // ─────────────────────────────────────────────────────────────────
-// Open Bridge for Obsidian · v0.9.2
+// Open Bridge for Obsidian · v0.9.3
 //
 // 历史 + 记忆: 对话自动回流 vault 成为可搜索可双链的 MD 文档
 //
@@ -39,7 +39,7 @@ const path = require('path');
 
 const VIEW_TYPE_CLAUDE_BRIDGE = 'open-bridge-view';
 const APP_NAME = 'Open Bridge';
-const PLUGIN_VERSION = '0.9.2';
+const PLUGIN_VERSION = '0.9.3';
 const SESSIONS_DIR = '_shared/ai-sessions';
 const FIGMA_BRIDGE_PORT = 3055;
 const FIGMA_STATUS_REFRESH_MS = 30000;
@@ -170,10 +170,10 @@ const I18N = {
     featureMultiTurn: '多轮对话 (按 + 新开 session, 否则自动 resume)',
     featureModes: '4 个模式: Default / Plan / Accept / Bypass',
     featureCost: 'Cost / Token 用量显示',
-    examplePluginStatus: '检查 .obsidian/plugins/ 所有插件状态',
-    exampleDesignTokens: '读 _shared/design-tokens/hanxue/DESIGN.md 并总结',
-    exampleBrief: '基于 _shared/templates/new-brief.md 生成一份示例 brief',
-    exampleTokenReview: '帮我审 designers/easiao/.../new-homepage/index.html 的 token 化率',
+    examplePluginStatus: '总结当前打开的笔记',
+    exampleDesignTokens: '改写我选中的段落，让它更清晰',
+    exampleBrief: '比较我加入上下文的两个文件，找出差异',
+    exampleTokenReview: '扫描当前 Vault，告诉我这里主要是什么项目',
     contextLabel: 'Context',
     contextHint: '这些内容会随下一次消息一起发给 AI',
     contextAIQuote: 'AI 引用',
@@ -333,10 +333,10 @@ const I18N = {
     featureMultiTurn: 'Multi-turn chat (use + for a new session, otherwise resume)',
     featureModes: '4 modes: Default / Plan / Accept / Bypass',
     featureCost: 'Cost / token usage display',
-    examplePluginStatus: 'Check all plugins under .obsidian/plugins/',
-    exampleDesignTokens: 'Read _shared/design-tokens/hanxue/DESIGN.md and summarize it',
-    exampleBrief: 'Generate an example brief from _shared/templates/new-brief.md',
-    exampleTokenReview: 'Review token usage in designers/easiao/.../new-homepage/index.html',
+    examplePluginStatus: 'Summarize the note I currently have open',
+    exampleDesignTokens: 'Rewrite my selected paragraph to make it clearer',
+    exampleBrief: 'Compare the two files I added as context and find the differences',
+    exampleTokenReview: 'Scan the current vault and tell me what this project is about',
     contextLabel: 'Context',
     contextHint: 'These items will be sent with your next message',
     contextAIQuote: 'AI quote',
@@ -496,10 +496,10 @@ const I18N = {
     featureMultiTurn: '複数ターン会話（+ で新規 session、それ以外は自動再開）',
     featureModes: '4 モード: Default / Plan / Accept / Bypass',
     featureCost: 'Cost / Token 使用量を表示',
-    examplePluginStatus: '.obsidian/plugins/ 以下のプラグイン状態を確認',
-    exampleDesignTokens: '_shared/design-tokens/hanxue/DESIGN.md を読んで要約',
-    exampleBrief: '_shared/templates/new-brief.md をもとに brief 例を作成',
-    exampleTokenReview: 'designers/easiao/.../new-homepage/index.html の token 化率をレビュー',
+    examplePluginStatus: '現在開いているノートを要約',
+    exampleDesignTokens: '選択した段落をよりわかりやすく書き直す',
+    exampleBrief: 'コンテキストに追加した2つのファイルを比較して差分を探す',
+    exampleTokenReview: '現在の Vault をスキャンして、このプロジェクトの内容を説明する',
     contextLabel: 'Context',
     contextHint: 'これらの項目は次のメッセージと一緒に AI へ送信されます',
     contextAIQuote: 'AI 引用',
