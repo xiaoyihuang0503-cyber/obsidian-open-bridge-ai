@@ -1,7 +1,7 @@
 {
   "id": "open-bridge",
   "name": "Open Bridge",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "minAppVersion": "1.4.0",
   "description": "A contextual AI workspace for Obsidian. Connect notes, selections, files, and AI CLI/API backends such as Claude, Codex, OpenAI-compatible gateways, and local models.",
   "author": "Hsiao Evan",

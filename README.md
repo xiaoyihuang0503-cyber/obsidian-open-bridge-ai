@@ -14,6 +14,7 @@ It is built for people who work inside a knowledge base and need the AI to under
 - Quote full AI replies, selected AI text, or individual AI paragraphs back into context.
 - Save sessions as Markdown inside the vault for search, review, and long-term memory.
 - Show live execution progress for supported CLIs.
+- Switch the interface language between Chinese, English, and Japanese.
 
 ## Installation
 
@@ -57,6 +58,16 @@ or type:
 
 ```text
 /setup
+```
+
+## Language
+
+Open Bridge supports Chinese, English, and Japanese interface text.
+
+Change it from:
+
+```text
+Settings -> Open Bridge -> Interface language
 ```
 
 ## Context Workflow
