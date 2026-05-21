@@ -77,20 +77,12 @@ Open Bridge 支持两类接入方式：
 
 Open Bridge 是这个方向的第一版。
 
-## 支持开发
-
-如果 Open Bridge 对你有帮助，可以在这里支持它：
-
-https://easiao.github.io/obsidian-open-bridge/support/
-
-支持页里有经过隐私处理的微信支付和支付宝二维码，公开显示名为 **Hsiao Evan**。
-
 ## 项目地址
 
 计划发布仓库：
 
 ```text
-https://github.com/easiao/obsidian-open-bridge
+https://github.com/xiaoyihuang0503-cyber/obsidian-open-bridge
 ```
 
 社区插件提交后，也会在 Obsidian Community Plugins 中搜索到 **Open Bridge**。

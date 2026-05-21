@@ -100,14 +100,6 @@ styles.css
 
 The release tag must match the `version` in `manifest.json`.
 
-## Support
-
-If Open Bridge saves you time, you can support development here:
-
-- Support page: https://easiao.github.io/obsidian-open-bridge/support/
-
-The support page includes privacy-masked WeChat Pay and Alipay QR codes using the public name **Hsiao Evan**.
-
 ## License
 
 MIT

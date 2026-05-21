@@ -1,7 +1,7 @@
 'use strict';
 
 // ─────────────────────────────────────────────────────────────────
-// Open Bridge for Obsidian · v0.9.0
+// Open Bridge for Obsidian · v0.9.1
 //
 // 历史 + 记忆: 对话自动回流 vault 成为可搜索可双链的 MD 文档
 //
@@ -39,7 +39,7 @@ const path = require('path');
 
 const VIEW_TYPE_CLAUDE_BRIDGE = 'open-bridge-view';
 const APP_NAME = 'Open Bridge';
-const PLUGIN_VERSION = '0.9.0';
+const PLUGIN_VERSION = '0.9.1';
 const SESSIONS_DIR = '_shared/ai-sessions';
 const FIGMA_BRIDGE_PORT = 3055;
 const FIGMA_STATUS_REFRESH_MS = 30000;

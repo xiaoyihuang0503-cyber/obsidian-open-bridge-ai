@@ -1,13 +1,10 @@
 {
   "id": "open-bridge",
   "name": "Open Bridge",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "minAppVersion": "1.4.0",
   "description": "A contextual AI workspace for Obsidian. Connect notes, selections, files, and AI CLI/API backends such as Claude, Codex, OpenAI-compatible gateways, and local models.",
-  "author": "easiao",
-  "authorUrl": "https://github.com/easiao",
-  "fundingUrl": {
-    "Support Open Bridge": "https://easiao.github.io/obsidian-open-bridge/support/"
-  },
+  "author": "Hsiao Evan",
+  "authorUrl": "https://github.com/xiaoyihuang0503-cyber",
   "isDesktopOnly": true
 }

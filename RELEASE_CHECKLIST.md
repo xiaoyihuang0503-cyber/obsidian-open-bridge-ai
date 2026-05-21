@@ -5,10 +5,8 @@
 - [ ] Confirm `manifest.json` uses `"id": "open-bridge"`.
 - [ ] Confirm `manifest.json` version matches the GitHub release tag.
 - [ ] Confirm `versions.json` contains the current version.
-- [ ] Replace `authorUrl` with the public repository or author profile.
-- [ ] Enable GitHub Pages from the `docs/` folder.
-- [ ] Confirm the support page opens: `https://easiao.github.io/obsidian-open-bridge/support/`.
-- [ ] Scan-test both WeChat Pay and Alipay QR codes from the support page.
+- [ ] Confirm `authorUrl` points to the public GitHub profile.
+- [ ] Do not add `fundingUrl` until after community review.
 - [ ] Run `node --check main.js`.
 - [ ] Test manual install in a clean vault:
 
@@ -24,7 +22,7 @@
 Create a release tagged:
 
 ```text
-0.9.0
+0.9.1
 ```
 
 Attach these files:
