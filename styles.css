@@ -12,7 +12,7 @@
   background: var(--background-primary);
 }
 
-.cb-hidden { display: none !important; }
+.cb-hidden { display: none; }
 
 /* ════════════════════════════════════════════════════════════
    Header
@@ -468,7 +468,7 @@ select.cb-backend-selector {
 
 .cb-msg-copy-btn.cb-msg-copy-done,
 .cb-msg-quote-btn.cb-msg-quote-done {
-  opacity: 1 !important;
+  opacity: 1;
   background: var(--color-green, #61C96D);
   color: white;
   border-color: var(--color-green, #61C96D);
@@ -762,14 +762,14 @@ select.cb-backend-selector {
 .cb-tool-card.cb-tool-done    { border-left-color: var(--color-green, #61C96D); }
 .cb-tool-card.cb-tool-error   { border-left-color: var(--text-error, #FF5155); }
 
-.cb-tool-color-blue    { border-left-color: var(--color-blue,    #5AC7FF) !important; }
-.cb-tool-color-green   { border-left-color: var(--color-green,   #61C96D) !important; }
-.cb-tool-color-orange  { border-left-color: var(--color-orange,  #FF8D57) !important; }
-.cb-tool-color-red     { border-left-color: var(--color-red,     #FF5155) !important; }
-.cb-tool-color-purple  { border-left-color: var(--color-purple,  #8266FA) !important; }
-.cb-tool-color-cyan    { border-left-color: var(--color-cyan,    #49CCF0) !important; }
-.cb-tool-color-magenta { border-left-color: var(--color-pink,    #FF5A90) !important; }
-.cb-tool-color-gray    { border-left-color: var(--text-faint) !important; }
+.cb-tool-card.cb-tool-color-blue    { border-left-color: var(--color-blue,    #5AC7FF); }
+.cb-tool-card.cb-tool-color-green   { border-left-color: var(--color-green,   #61C96D); }
+.cb-tool-card.cb-tool-color-orange  { border-left-color: var(--color-orange,  #FF8D57); }
+.cb-tool-card.cb-tool-color-red     { border-left-color: var(--color-red,     #FF5155); }
+.cb-tool-card.cb-tool-color-purple  { border-left-color: var(--color-purple,  #8266FA); }
+.cb-tool-card.cb-tool-color-cyan    { border-left-color: var(--color-cyan,    #49CCF0); }
+.cb-tool-card.cb-tool-color-magenta { border-left-color: var(--color-pink,    #FF5A90); }
+.cb-tool-card.cb-tool-color-gray    { border-left-color: var(--text-faint); }
 
 .cb-tool-header {
   display: flex;
@@ -818,8 +818,7 @@ select.cb-backend-selector {
 
 .cb-tool-body.cb-collapsed { display: none; }
 
-.cb-tool-card .cb-tool-body.cb-collapsed ~ .cb-tool-chevron,
-.cb-tool-header:has(+ .cb-tool-body.cb-collapsed) .cb-tool-chevron {
+.cb-tool-card.cb-tool-collapsed .cb-tool-chevron {
   transform: rotate(-90deg);
 }
 
@@ -974,7 +973,7 @@ select.cb-backend-selector {
 
 /* For Write tool, single block diff-add style */
 pre.cb-diff-add {
-  background: rgba(97, 201, 109, 0.05) !important;
+  background: rgba(97, 201, 109, 0.05);
   border-left: 3px solid var(--color-green, #61C96D);
 }
 

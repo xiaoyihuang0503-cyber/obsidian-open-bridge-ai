@@ -2470,7 +2470,11 @@ class ClaudeBridgeView extends obsidian.ItemView {
 
     // Body (collapsed by default)
     const body = card.createDiv({ cls: 'cb-tool-body' });
-    if (this.plugin.settings.autoCollapseToolBody) body.addClass('cb-collapsed');
+    const setCollapsed = (collapsed) => {
+      body.toggleClass('cb-collapsed', collapsed);
+      card.toggleClass('cb-tool-collapsed', collapsed);
+    };
+    setCollapsed(this.plugin.settings.autoCollapseToolBody);
 
     // Input area — 工具特化渲染
     const inputArea = body.createDiv({ cls: 'cb-tool-input-area' });
@@ -2480,7 +2484,7 @@ class ClaudeBridgeView extends obsidian.ItemView {
     const resultArea = body.createDiv({ cls: 'cb-tool-result-area cb-hidden' });
 
     // Click header to toggle
-    header.onclick = () => body.toggleClass('cb-collapsed', !body.hasClass('cb-collapsed'));
+    header.onclick = () => setCollapsed(!body.hasClass('cb-collapsed'));
 
     // 保存引用
     this.toolCards.set(tool.id, { card, body, inputArea, resultArea });
