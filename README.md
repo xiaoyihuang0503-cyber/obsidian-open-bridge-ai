@@ -27,7 +27,6 @@ Open Bridge starts from your Obsidian workspace. It is designed for people who o
 
 Instead of asking the user to explain everything again, Open Bridge lets the user explicitly attach the current working context.
 <img width="1148" height="1408" alt="image" src="https://github.com/user-attachments/assets/9da2afeb-05f5-4c6d-b7f5-e5540f79f18e" />
-<img width="2020" height="1304" alt="image" src="https://github.com/user-attachments/assets/35cf5324-0a9d-4b81-b34b-87fcf5a1e574" />
 
 ## Context Workflow
 
