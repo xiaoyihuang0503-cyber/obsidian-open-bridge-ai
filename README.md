@@ -47,7 +47,7 @@ After the plugin is accepted into the community plugin directory:
 2. Create this folder in your vault:
 
 ```text
-.obsidian/plugins/open-bridge/
+.obsidian/plugins/open-bridge-ai/
 ```
 
 3. Put the three files into that folder.
