@@ -1,10 +1,10 @@
-# Open Bridge
+# Open Bridge AI
 
-Open Bridge is a contextual AI workspace for Obsidian.
+Open Bridge AI is a contextual AI workspace for Obsidian.
 
 It connects notes, selected text, files, folders, AI responses, and local or cloud AI backends, so you can work with AI inside your vault without repeatedly copying context into a separate chat window.
 
-The core idea is simple: when you say "this file", "this paragraph", or "that AI answer", Open Bridge helps the AI understand exactly what you are referring to.
+The core idea is simple: when you say "this file", "this paragraph", or "that AI answer", Open Bridge AI helps the AI understand exactly what you are referring to.
 
 ## Key Features
 
@@ -19,15 +19,15 @@ The core idea is simple: when you say "this file", "this paragraph", or "that AI
 - Show live execution progress for supported CLIs.
 - Switch the interface language between Chinese, English, and Japanese.
 
-## Why Open Bridge
+## Why Open Bridge AI
 
 Most AI chat plugins start with an empty conversation.
 
-Open Bridge starts from your workspace. It is designed for people who organize real work in notes: research, product planning, design decisions, technical documentation, writing drafts, project knowledge, and team memory.
+Open Bridge AI starts from your workspace. It is designed for people who organize real work in notes: research, product planning, design decisions, technical documentation, writing drafts, project knowledge, and team memory.
 
-Instead of asking the user to explain everything again, Open Bridge lets the user explicitly attach the current working context.
+Instead of asking the user to explain everything again, Open Bridge AI lets the user explicitly attach the current working context.
 
-<img width="1148" height="1408" alt="Open Bridge context workflow" src="https://github.com/user-attachments/assets/9da2afeb-05f5-4c6d-b7f5-e5540f79f18e" />
+<img width="1148" height="1408" alt="Open Bridge AI context workflow" src="https://github.com/user-attachments/assets/9da2afeb-05f5-4c6d-b7f5-e5540f79f18e" />
 
 ## Installation
 
@@ -38,7 +38,7 @@ After the plugin is accepted into the community plugin directory:
 1. Open Settings.
 2. Go to Community plugins.
 3. Choose Browse.
-4. Search for Open Bridge.
+4. Search for Open Bridge AI.
 5. Install and enable the plugin.
 
 ### Manual install
@@ -52,26 +52,26 @@ After the plugin is accepted into the community plugin directory:
 
 3. Put the three files into that folder.
 4. Restart Obsidian or reload community plugins.
-5. Enable Open Bridge in Settings -> Community plugins.
+5. Enable Open Bridge AI in Settings -> Community plugins.
 
 ## Usage
 
-1. Open the Open Bridge view from the ribbon icon or command palette.
+1. Open the Open Bridge AI view from the ribbon icon or command palette.
 2. Choose a backend: Claude, Codex, or Custom.
 3. Add context before asking:
-   - Right-click a file or folder and choose Add to Open Bridge context.
-   - Select Markdown text, then right-click and choose Add selection to Open Bridge context.
+   - Right-click a file or folder and choose Add to Open Bridge AI context.
+   - Select Markdown text, then right-click and choose Add selection to Open Bridge AI context.
    - Quote a full AI answer, selected AI text, or one AI paragraph back into context.
 4. Ask your question in the chat box. The active context is sent together with your message.
 5. Start a new session when switching topics, or continue the current session when you want the AI to remember the previous discussion.
 
 ## Context Workflow
 
-Open Bridge is designed around explicit context references.
+Open Bridge AI is designed around explicit context references.
 
 You can:
 
-- Right-click a file or folder and add it to Open Bridge context.
+- Right-click a file or folder and add it to Open Bridge AI context.
 - Select text in a Markdown file and add it to context.
 - Quote an entire AI response back into context.
 - Select part of an AI response and quote only that fragment.
@@ -89,7 +89,7 @@ Turn this into a clearer product note.
 
 ## Model Setup
 
-Open Bridge supports two Codex connection modes:
+Open Bridge AI supports two Codex connection modes:
 
 | Mode | Best For | What You Need |
 |---|---|---|
@@ -99,7 +99,7 @@ Open Bridge supports two Codex connection modes:
 Open the setup wizard from:
 
 ```text
-Settings -> Open Bridge -> Model gateway setup
+Settings -> Open Bridge AI -> Model gateway setup
 ```
 
 or type:
@@ -110,24 +110,24 @@ or type:
 
 ## Language
 
-Open Bridge supports Chinese, English, and Japanese interface text.
+Open Bridge AI supports Chinese, English, and Japanese interface text.
 
 Change it from:
 
 ```text
-Settings -> Open Bridge -> Interface language
+Settings -> Open Bridge AI -> Interface language
 ```
 
 ## Commands
 
-- New Open Bridge chat
-- Reveal Open Bridge chat
-- Open Bridge chat in current pane
-- Add current file to Open Bridge context
-- Add selection to Open Bridge context
+- New Open Bridge AI chat
+- Reveal Open Bridge AI chat
+- Open Bridge AI chat in current pane
+- Add current file to Open Bridge AI context
+- Add selection to Open Bridge AI context
 - Resume AI session
 - Configure model gateway
-- Reload Open Bridge
+- Reload Open Bridge AI
 
 ## Release Files
 
