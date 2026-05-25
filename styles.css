@@ -1168,6 +1168,11 @@ pre.cb-diff-add {
   max-width: 240px;
 }
 
+.cb-context-chip.cb-context-folder {
+  background: var(--background-primary-alt);
+  border-color: var(--interactive-accent);
+}
+
 .cb-context-icon { display: inline-flex; color: var(--text-accent); }
 .cb-context-icon svg { width: 12px; height: 12px; }
 .cb-context-name {

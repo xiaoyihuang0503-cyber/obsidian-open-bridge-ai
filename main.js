@@ -39,7 +39,7 @@ const path = require('path');
 
 const VIEW_TYPE_CLAUDE_BRIDGE = 'open-bridge-view';
 const APP_NAME = 'Open Bridge AI';
-const PLUGIN_VERSION = '0.9.7';
+const PLUGIN_VERSION = '0.9.8';
 const SESSIONS_DIR = '_shared/ai-sessions';
 const FIGMA_BRIDGE_PORT = 3055;
 const FIGMA_STATUS_REFRESH_MS = 30000;
@@ -177,6 +177,10 @@ const I18N = {
     contextLabel: 'Context',
     contextHint: '这些内容会随下一次消息一起发给 AI',
     contextAIQuote: 'AI 引用',
+    contextTypeFolder: '目录',
+    contextTypeFile: '文件',
+    contextTypeSelection: '选中',
+    contextTypeAIQuote: 'AI 引用',
     contextRemove: '移除上下文',
     contextClear: '清空',
     remove: '移除',
@@ -340,6 +344,10 @@ const I18N = {
     contextLabel: 'Context',
     contextHint: 'These items will be sent with your next message',
     contextAIQuote: 'AI quote',
+    contextTypeFolder: 'Folder',
+    contextTypeFile: 'File',
+    contextTypeSelection: 'Selection',
+    contextTypeAIQuote: 'AI quote',
     contextRemove: 'Remove context',
     contextClear: 'Clear',
     remove: 'Remove',
@@ -503,6 +511,10 @@ const I18N = {
     contextLabel: 'Context',
     contextHint: 'これらの項目は次のメッセージと一緒に AI へ送信されます',
     contextAIQuote: 'AI 引用',
+    contextTypeFolder: 'フォルダ',
+    contextTypeFile: 'ファイル',
+    contextTypeSelection: '選択範囲',
+    contextTypeAIQuote: 'AI 引用',
     contextRemove: 'コンテキストを削除',
     contextClear: 'クリア',
     remove: '削除',
@@ -1686,6 +1698,29 @@ class ClaudeBridgeView extends obsidian.ItemView {
     return `${item.type || 'file'}:${item.path}`;
   }
 
+  getContextTypeLabel(ctx) {
+    if (ctx.type === 'folder') return this.t('contextTypeFolder');
+    if (ctx.type === 'selection') return this.t('contextTypeSelection');
+    if (ctx.type === 'ai_quote') return this.t('contextTypeAIQuote');
+    return this.t('contextTypeFile');
+  }
+
+  getContextEmoji(ctx) {
+    if (ctx.type === 'folder') return '📁';
+    if (ctx.type === 'selection') return '✎';
+    if (ctx.type === 'ai_quote') return '❞';
+    return '📄';
+  }
+
+  formatContextItemLabel(ctx, includeType = false) {
+    const target = ctx.type === 'selection'
+      ? `${ctx.name || ctx.path}:${ctx.startLine}`
+      : ctx.type === 'ai_quote'
+        ? (ctx.name || this.t('contextAIQuote'))
+        : (ctx.path || ctx.name || '');
+    return includeType ? `${this.getContextTypeLabel(ctx)}: ${target}` : target;
+  }
+
   simpleHash(text) {
     let h = 0;
     const s = String(text || '');
@@ -1706,15 +1741,12 @@ class ClaudeBridgeView extends obsidian.ItemView {
     label.title = this.t('contextHint');
 
     this.contextItems.forEach((ctx, idx) => {
-      const chip = this.contextBar.createDiv({ cls: 'cb-context-chip' });
+      const chip = this.contextBar.createDiv({ cls: `cb-context-chip cb-context-${ctx.type || 'file'}` });
       const icon = chip.createSpan({ cls: 'cb-context-icon' });
       obsidian.setIcon(icon, ctx.type === 'folder' ? 'folder' : ctx.type === 'selection' ? 'text-cursor-input' : ctx.type === 'ai_quote' ? 'quote' : 'file-text');
-      const text = ctx.type === 'selection'
-        ? `${ctx.name}:${ctx.startLine}`
-        : ctx.type === 'ai_quote'
-          ? ctx.name || this.t('contextAIQuote')
-        : ctx.path;
-      chip.createSpan({ cls: 'cb-context-name', text: this.truncate(text, 34), title: ctx.path });
+      const text = this.formatContextItemLabel(ctx, true);
+      const title = ctx.type === 'ai_quote' ? text : `${text}\n${ctx.path || ''}`.trim();
+      chip.createSpan({ cls: 'cb-context-name', text: this.truncate(text, 42), title });
 
       const remove = chip.createEl('button', { cls: 'cb-context-remove', attr: { 'aria-label': this.t('contextRemove') } });
       obsidian.setIcon(remove, 'x');
@@ -1996,7 +2028,16 @@ class ClaudeBridgeView extends obsidian.ItemView {
 
   shouldUseQuickScan(raw) {
     if (this.attachments.length > 0) return false;
-    return /(看|扫|分析|了解).*(目录|文件夹|项目结构|本地目录|整体项目|仓库结构)|目录结构|项目目录/i.test(raw);
+    if (this.contextItems.length > 0) return false;
+    const normalized = String(raw || '').trim().toLowerCase().replace(/\s+/g, '');
+    return [
+      '本地目录快速扫描',
+      '快速扫描当前目录',
+      '扫描当前目录',
+      '扫描当前vault',
+      '扫描当前vault目录',
+      '扫描工作区'
+    ].includes(normalized);
   }
 
   buildVaultScanSummary() {
@@ -2139,7 +2180,9 @@ class ClaudeBridgeView extends obsidian.ItemView {
   composeUserDisplay(text) {
     const blocks = [];
     if (this.contextItems.length > 0) {
-      const list = this.contextItems.map(ctx => `\`${ctx.type === 'selection' ? `${ctx.path}:${ctx.startLine}` : ctx.path}\``).join(' · ');
+      const list = this.contextItems
+        .map(ctx => `${this.getContextEmoji(ctx)} \`${this.formatContextItemLabel(ctx, true)}\``)
+        .join(' · ');
       blocks.push(`📌 上下文: ${list}`);
     }
     if (this.attachments.length > 0) {
@@ -2197,9 +2240,12 @@ class ClaudeBridgeView extends obsidian.ItemView {
           '```'
         ].join('\n');
       } else if (ctx.type === 'folder') {
+        const preview = this.readContextFolderPreview(ctx.path, Math.min(2500, budget));
         block = [
           `### 目录上下文: ${ctx.path}`,
-          '这是用户从 Obsidian 文件列表加入的目录。需要时先扫描/读取该目录，不要假设目录内容。'
+          '这是用户从 Obsidian 文件列表加入的目录。用户提到“这个目录/这里/这些文件”时，优先理解为这个目录。',
+          preview ? '\n目录概览:\n```text\n' + preview + '\n```' : '',
+          '需要更完整信息时，继续用工具扫描或读取该目录。'
         ].join('\n');
       } else {
         const preview = this.readContextFilePreview(ctx.path, Math.min(4000, budget));
@@ -2226,6 +2272,18 @@ class ClaudeBridgeView extends obsidian.ItemView {
       if (stat.size > 1024 * 1024) return `文件较大 (${this.formatSize(stat.size)})，请按需读取: ${relPath}`;
       const text = fs.readFileSync(full, 'utf8');
       return this.truncate(text, limit || 4000);
+    } catch (e) {
+      return '';
+    }
+  }
+
+  readContextFolderPreview(relPath, limit) {
+    try {
+      const full = path.join(this.getVaultBasePath(), relPath);
+      if (!fs.existsSync(full) || !fs.statSync(full).isDirectory()) return '';
+      const scan = this.scanDirectory(full, 2, 80);
+      const body = scan.tree + (scan.truncated ? '\n...已截断' : '');
+      return this.truncate(body, limit || 2500);
     } catch (e) {
       return '';
     }

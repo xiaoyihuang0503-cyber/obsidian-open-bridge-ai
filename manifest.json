@@ -1,7 +1,7 @@
 {
   "id": "open-bridge-ai",
   "name": "Open Bridge AI",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "minAppVersion": "1.4.0",
   "description": "A contextual AI workspace that connects notes, selections, files, AI responses, and CLI/API model backends.",
   "author": "Hsiao Evan",
