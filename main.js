@@ -39,7 +39,7 @@ const path = require('path');
 
 const VIEW_TYPE_CLAUDE_BRIDGE = 'open-bridge-view';
 const APP_NAME = 'Open Bridge AI';
-const PLUGIN_VERSION = '0.9.8';
+const PLUGIN_VERSION = '0.9.9';
 const SESSIONS_DIR = '_shared/ai-sessions';
 const FIGMA_BRIDGE_PORT = 3055;
 const FIGMA_STATUS_REFRESH_MS = 30000;
@@ -140,6 +140,8 @@ const I18N = {
     errorNoHome: '找不到用户主目录，无法写入 Codex 配置。',
     statusReady: '就绪',
     statusReadyCwd: '就绪 · cwd = vault root',
+    statusThinking: '运行中 · {backend} 正在处理...',
+    statusInterrupted: '已中断 · 就绪',
     sessionNew: 'new session',
     figmaOff: '⚫ Figma off',
     figmaHint: '点击: /figma status\n双击: /figma connect',
@@ -160,6 +162,9 @@ const I18N = {
     toolbarSlash: '斜杠命令',
     toolbarMic: '语音输入 (v0.6)',
     sendLabel: '发送 (Enter)，换行用 Shift+Enter',
+    stopRunningLabel: '{backend} 正在运行，点击中断',
+    runningHint: '{backend} 正在运行，点右侧动态图标中断',
+    noticeAlreadyRunning: '{backend} 正在运行，点右侧动态图标或按 Esc 中断后再发送。',
     welcomeTitle: '👋 Open Bridge v{version} · 多 Backend 知识库操作面板',
     welcomeLine: 'cwd = vault 根目录, AI Backend 看得到所有资产文件。',
     welcomeFeaturesTitle: '✨ v0.4 新增',
@@ -307,6 +312,8 @@ const I18N = {
     errorNoHome: 'Cannot find the user home directory, so Codex config cannot be written.',
     statusReady: 'Ready',
     statusReadyCwd: 'Ready · cwd = vault root',
+    statusThinking: 'Running · {backend} is working...',
+    statusInterrupted: 'Stopped · ready',
     sessionNew: 'new session',
     figmaOff: '⚫ Figma off',
     figmaHint: 'Click: /figma status\nDouble-click: /figma connect',
@@ -327,6 +334,9 @@ const I18N = {
     toolbarSlash: 'Slash commands',
     toolbarMic: 'Voice input (v0.6)',
     sendLabel: 'Send (Enter), newline with Shift+Enter',
+    stopRunningLabel: '{backend} is running, click to stop',
+    runningHint: '{backend} is running. Click the animated icon to stop.',
+    noticeAlreadyRunning: '{backend} is running. Click the animated icon or press Esc to stop before sending again.',
     welcomeTitle: '👋 Open Bridge v{version} · Multi-backend knowledge workspace',
     welcomeLine: 'cwd = vault root. The AI backend can access your asset files.',
     welcomeFeaturesTitle: '✨ What is included',
@@ -474,6 +484,8 @@ const I18N = {
     errorNoHome: 'ユーザーホームが見つからないため、Codex 設定を書き込めません。',
     statusReady: '準備完了',
     statusReadyCwd: '準備完了 · cwd = vault root',
+    statusThinking: '実行中 · {backend} が処理しています...',
+    statusInterrupted: '停止しました · 準備完了',
     sessionNew: 'new session',
     figmaOff: '⚫ Figma off',
     figmaHint: 'クリック: /figma status\nダブルクリック: /figma connect',
@@ -494,6 +506,9 @@ const I18N = {
     toolbarSlash: 'スラッシュコマンド',
     toolbarMic: '音声入力 (v0.6)',
     sendLabel: '送信 (Enter)、改行は Shift+Enter',
+    stopRunningLabel: '{backend} 実行中。クリックして停止',
+    runningHint: '{backend} 実行中。右側のアニメーションアイコンで停止できます。',
+    noticeAlreadyRunning: '{backend} 実行中です。右側のアニメーションアイコンまたは Esc で停止してから送信してください。',
     welcomeTitle: '👋 Open Bridge v{version} · マルチバックエンド知識ワークスペース',
     welcomeLine: 'cwd = vault root。AI バックエンドは資産ファイルにアクセスできます。',
     welcomeFeaturesTitle: '✨ 主な機能',
@@ -1292,7 +1307,11 @@ class ClaudeBridgeView extends obsidian.ItemView {
     this.backendSelectorEl = null;
     this.modelDisplayEl = null;
     this.messagesContainer = null;
+    this.inputBoxEl = null;
     this.inputEl = null;
+    this.sendBtn = null;
+    this.runningHintEl = null;
+    this.runningHintTextEl = null;
     this.contextBar = null;
     this.attachmentsBar = null;
     this.statusEl = null;
@@ -1476,6 +1495,7 @@ class ClaudeBridgeView extends obsidian.ItemView {
   buildInputArea(container) {
     const inputArea = container.createDiv({ cls: 'cb-input-area' });
     const inputBox = inputArea.createDiv({ cls: 'cb-input-box' });
+    this.inputBoxEl = inputBox;
 
     this.contextBar = inputBox.createDiv({ cls: 'cb-context-bar cb-hidden' });
     this.attachmentsBar = inputBox.createDiv({ cls: 'cb-attachments-bar cb-hidden' });
@@ -1494,11 +1514,17 @@ class ClaudeBridgeView extends obsidian.ItemView {
     this.makeToolbarButton(tlLeft, 'pin',       this.t('toolbarPin'),    () => this.plugin.addActiveFileToBridgeContext());
     this.makeToolbarButton(tlLeft, 'slash',     this.t('toolbarSlash'),  () => this.openSlashHelp());
     this.makeToolbarButton(tlLeft, 'mic',       this.t('toolbarMic'),    () => this.notImplementedYet(this.t('toolbarMic')));
+    this.runningHintEl = tlLeft.createDiv({ cls: 'cb-running-hint cb-hidden' });
+    const runningHintIcon = this.runningHintEl.createSpan({ cls: 'cb-running-hint-icon' });
+    obsidian.setIcon(runningHintIcon, 'loader-circle');
+    this.runningHintTextEl = this.runningHintEl.createSpan({ cls: 'cb-running-hint-text' });
 
     const tlRight = toolbar.createDiv({ cls: 'cb-toolbar-right' });
     const sendBtn = tlRight.createEl('button', { cls: 'cb-send-btn', attr: { 'aria-label': this.t('sendLabel') } });
     obsidian.setIcon(sendBtn, 'arrow-up');
-    sendBtn.onclick = () => this.sendMessage();
+    this.sendBtn = sendBtn;
+    sendBtn.title = this.t('sendLabel');
+    sendBtn.onclick = () => this.isRunning ? this.stopCurrent() : this.sendMessage();
 
     // 事件
     let isComposing = false;
@@ -2124,7 +2150,11 @@ class ClaudeBridgeView extends obsidian.ItemView {
 
   async sendMessage() {
     const backendLabel = BACKENDS[this.currentBackend]?.label || 'AI';
-    if (this.isRunning) { new obsidian.Notice(`${backendLabel} 思考中, Esc 中断`); return; }
+    if (this.isRunning) {
+      this.pulseRunningIndicator();
+      new obsidian.Notice(this.t('noticeAlreadyRunning', { backend: backendLabel }));
+      return;
+    }
     const raw = this.inputEl.value.trim();
     if (!raw && this.attachments.length === 0 && this.contextItems.length === 0) return;
     const userText = raw || '请基于我加入的上下文进行分析。';
@@ -2164,13 +2194,13 @@ class ClaudeBridgeView extends obsidian.ItemView {
     this.attachments = [];
     this.renderAttachments();
 
-    this.isRunning = true;
-    this.updateStatus(`🤔 ${backendLabel} 思考中...`);
+    this.setRunningState(true, backendLabel);
+    this.updateStatus(this.t('statusThinking', { backend: backendLabel }));
     try {
       await this.runAI(fullPrompt);
     } finally {
-      this.isRunning = false;
-      this.updateStatus(this.currentMode === 'bypass' ? '⚠ Bypass · 就绪' : '就绪');
+      this.setRunningState(false);
+      this.updateStatus(this.currentMode === 'bypass' ? '⚠ Bypass · ' + this.t('statusReady') : this.t('statusReady'));
       // v0.6: 把当轮 assistant turn 完成态推入 messages, 然后写入 vault
       this.finalizeTurn();
       await this.saveSessionToVault();
@@ -3416,11 +3446,42 @@ class ClaudeBridgeView extends obsidian.ItemView {
   }
 
   stopCurrent() {
+    const wasRunning = this.isRunning || !!this.currentProcess;
     if (this.currentProcess) {
       try { this.currentProcess.kill('SIGTERM'); } catch (e) {}
       this.currentProcess = null;
     }
-    this.isRunning = false;
+    this.setRunningState(false);
+    if (wasRunning) this.updateStatus(this.t('statusInterrupted'));
+  }
+
+  setRunningState(running, backendLabel = null) {
+    const label = backendLabel || BACKENDS[this.currentBackend]?.label || 'AI';
+    this.isRunning = !!running;
+    this.inputBoxEl?.toggleClass('cb-ai-running', this.isRunning);
+
+    if (this.runningHintEl) {
+      this.runningHintEl.toggleClass('cb-hidden', !this.isRunning);
+      if (this.runningHintTextEl) this.runningHintTextEl.setText(this.t('runningHint', { backend: label }));
+    }
+
+    if (this.sendBtn) {
+      this.sendBtn.toggleClass('cb-send-running', this.isRunning);
+      this.sendBtn.empty();
+      obsidian.setIcon(this.sendBtn, this.isRunning ? 'loader-circle' : 'arrow-up');
+      const title = this.isRunning ? this.t('stopRunningLabel', { backend: label }) : this.t('sendLabel');
+      this.sendBtn.title = title;
+      this.sendBtn.setAttribute('aria-label', title);
+    }
+  }
+
+  pulseRunningIndicator() {
+    this.inputBoxEl?.addClass('cb-running-nudge');
+    this.sendBtn?.addClass('cb-running-nudge');
+    window.setTimeout(() => {
+      this.inputBoxEl?.removeClass('cb-running-nudge');
+      this.sendBtn?.removeClass('cb-running-nudge');
+    }, 650);
   }
 
   updateStatus(text) { if (this.statusEl) this.statusEl.setText(text); }
