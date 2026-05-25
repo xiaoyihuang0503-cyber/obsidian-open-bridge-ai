@@ -38,8 +38,8 @@ const fs = require('fs');
 const path = require('path');
 
 const VIEW_TYPE_CLAUDE_BRIDGE = 'open-bridge-view';
-const APP_NAME = 'Open Bridge';
-const PLUGIN_VERSION = '0.9.3';
+const APP_NAME = 'Open Bridge AI';
+const PLUGIN_VERSION = '0.9.6';
 const SESSIONS_DIR = '_shared/ai-sessions';
 const FIGMA_BRIDGE_PORT = 3055;
 const FIGMA_STATUS_REFRESH_MS = 30000;
@@ -1322,7 +1322,7 @@ class ClaudeBridgeView extends obsidian.ItemView {
     const left = header.createDiv({ cls: 'cb-header-left' });
     const title = left.createDiv({ cls: 'cb-header-title' });
     title.createSpan({ text: '🤖', cls: 'cb-header-icon' });
-    title.createSpan({ text: 'Open Bridge', cls: 'cb-header-text' });
+    title.createSpan({ text: APP_NAME, cls: 'cb-header-text' });
     title.createSpan({ text: 'v' + PLUGIN_VERSION, cls: 'cb-header-version' });
 
     this.statusEl = left.createDiv({ cls: 'cb-status-inline', text: this.t('statusReady') });
@@ -3194,7 +3194,7 @@ class ClaudeBridgeView extends obsidian.ItemView {
     }
 
     md += '\n---\n\n';
-    md += `> 由 [${APP_NAME}](../plugins/open-bridge/README.md) v${PLUGIN_VERSION} 自动生成\n`;
+    md += `> 由 [${APP_NAME}](../plugins/open-bridge-ai/README.md) v${PLUGIN_VERSION} 自动生成\n`;
     return md;
   }
 
