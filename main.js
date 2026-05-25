@@ -39,11 +39,11 @@ const path = require('path');
 
 const VIEW_TYPE_CLAUDE_BRIDGE = 'open-bridge-view';
 const APP_NAME = 'Open Bridge AI';
-const PLUGIN_VERSION = '0.9.6';
+const PLUGIN_VERSION = '0.9.7';
 const SESSIONS_DIR = '_shared/ai-sessions';
 const FIGMA_BRIDGE_PORT = 3055;
 const FIGMA_STATUS_REFRESH_MS = 30000;
-const BACKEND_RUN_TIMEOUT_MS = 120000;
+const BACKEND_RUN_TIMEOUT_MS = 300000;
 const QUICK_SCAN_MAX_DEPTH = 3;
 const QUICK_SCAN_MAX_ITEMS = 260;
 const PROMPT_CONTEXT_MAX_MESSAGES = 8;
@@ -628,7 +628,7 @@ const DEFAULT_SETTINGS = {
     codex: {
       path: 'codex',
       model: '',
-      extraArgs: '--sandbox workspace-write',
+      extraArgs: '--ignore-user-config --sandbox workspace-write',
     },
     custom: {
       path: '',
