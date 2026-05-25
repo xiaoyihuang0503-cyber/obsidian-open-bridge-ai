@@ -39,7 +39,7 @@ const path = require('path');
 
 const VIEW_TYPE_CLAUDE_BRIDGE = 'open-bridge-view';
 const APP_NAME = 'Open Bridge AI';
-const PLUGIN_VERSION = '0.9.9';
+const PLUGIN_VERSION = '0.9.10';
 const SESSIONS_DIR = '_shared/ai-sessions';
 const FIGMA_BRIDGE_PORT = 3055;
 const FIGMA_STATUS_REFRESH_MS = 30000;

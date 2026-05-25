@@ -1479,3 +1479,6 @@ pre.cb-diff-add {
 .cb-model-gateway-actions .setting-item {
   border-top: none;
 }
+
+/* Keep this utility last so component display rules cannot override it. */
+.cb-hidden { display: none; }
